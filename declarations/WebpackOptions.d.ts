@@ -2097,6 +2097,10 @@ export interface Output {
 	 */
 	hotUpdateMainFilename?: HotUpdateMainFilename;
 	/**
+	 * Ignore warnings in the browser.
+	 */
+	ignoreBrowserWarnings?: boolean;
+	/**
 	 * Wrap javascript code into IIFE's to avoid leaking into global scope.
 	 */
 	iife?: Iife;
@@ -2486,6 +2490,10 @@ export interface StatsOptions {
 	 */
 	errorsCount?: boolean;
 	/**
+	 * Space to display errors (value is in number of lines).
+	 */
+	errorsSpace?: number;
+	/**
 	 * Please use excludeModules instead.
 	 */
 	exclude?: boolean | ModuleFilterTypes;
@@ -2669,6 +2677,10 @@ export interface StatsOptions {
 	 * Suppress listing warnings that match the specified filters (they will still be counted). Filters can be Strings, RegExps or Functions.
 	 */
 	warningsFilter?: WarningFilterTypes;
+	/**
+	 * Space to display warnings (value is in number of lines).
+	 */
+	warningsSpace?: number;
 }
 /**
  * Options for the watcher.
@@ -3297,6 +3309,10 @@ export interface OutputNormalized {
 	 * The filename of the Hot Update Main File. It is inside the 'output.path' directory.
 	 */
 	hotUpdateMainFilename?: HotUpdateMainFilename;
+	/**
+	 * Ignore warnings in the browser.
+	 */
+	ignoreBrowserWarnings?: boolean;
 	/**
 	 * Wrap javascript code into IIFE's to avoid leaking into global scope.
 	 */
