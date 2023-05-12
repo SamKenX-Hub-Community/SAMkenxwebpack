@@ -3506,6 +3506,7 @@ declare class EnvironmentPlugin {
 	 */
 	apply(compiler: Compiler): void;
 }
+type ErrorWithDetail = Error & { details?: string };
 declare interface Etag {
 	toString: () => string;
 }
@@ -6871,8 +6872,54 @@ declare interface MinChunkSizePluginOptions {
 	minChunkSize: number;
 }
 declare class Module extends DependenciesBlock {
-	constructor(type: string, context?: string, layer?: string);
-	type: string;
+	constructor(
+		type:
+			| ""
+			| "runtime"
+			| "javascript/auto"
+			| "javascript/dynamic"
+			| "javascript/esm"
+			| "json"
+			| "webassembly/async"
+			| "webassembly/sync"
+			| "css"
+			| "css/global"
+			| "css/module"
+			| "asset"
+			| "asset/inline"
+			| "asset/resource"
+			| "asset/source"
+			| "asset/raw-data-url"
+			| "fallback-module"
+			| "remote-module"
+			| "provide-module"
+			| "consume-shared-module"
+			| "lazy-compilation-proxy",
+		context?: string,
+		layer?: string
+	);
+	type:
+		| ""
+		| "runtime"
+		| "javascript/auto"
+		| "javascript/dynamic"
+		| "javascript/esm"
+		| "json"
+		| "webassembly/async"
+		| "webassembly/sync"
+		| "css"
+		| "css/global"
+		| "css/module"
+		| "asset"
+		| "asset/inline"
+		| "asset/resource"
+		| "asset/source"
+		| "asset/raw-data-url"
+		| "fallback-module"
+		| "remote-module"
+		| "provide-module"
+		| "consume-shared-module"
+		| "lazy-compilation-proxy";
 	context: null | string;
 	layer: null | string;
 	needId: boolean;
@@ -7831,9 +7878,9 @@ declare interface NormalModuleCreateData {
 	layer?: string;
 
 	/**
-	 * module type
+	 * module type. When deserializing, this is set to an empty string "".
 	 */
-	type: string;
+	type: "" | "javascript/auto" | "javascript/dynamic" | "javascript/esm";
 
 	/**
 	 * request string
@@ -7977,9 +8024,9 @@ declare interface NormalModuleLoaderContext<OptionsType> {
 		context: string,
 		request: string,
 		callback: (
-			arg0: null | Error,
-			arg1?: string | false,
-			arg2?: ResolveRequest
+			err: null | ErrorWithDetail,
+			res?: string | false,
+			req?: ResolveRequest
 		) => void
 	): any;
 	getResolve(options?: ResolveOptionsWithDependencyType): {
@@ -7987,9 +8034,9 @@ declare interface NormalModuleLoaderContext<OptionsType> {
 			context: string,
 			request: string,
 			callback: (
-				arg0: null | Error,
-				arg1?: string | false,
-				arg2?: ResolveRequest
+				err: null | ErrorWithDetail,
+				res?: string | false,
+				req?: ResolveRequest
 			) => void
 		): void;
 		(context: string, request: string): Promise<string>;
@@ -10088,9 +10135,9 @@ declare abstract class Resolver {
 		request: string,
 		resolveContext: ResolveContext,
 		callback: (
-			arg0: null | Error,
-			arg1?: string | false,
-			arg2?: ResolveRequest
+			err: null | ErrorWithDetail,
+			res?: string | false,
+			req?: ResolveRequest
 		) => void
 	): void;
 	doResolve(
@@ -12116,6 +12163,11 @@ declare class TopLevelSymbol {
  * Use a Trusted Types policy to create urls for chunks.
  */
 declare interface TrustedTypes {
+	/**
+	 * If the call to `trustedTypes.createPolicy(...)` fails -- e.g., due to the policy name missing from the CSP `trusted-types` list, or it being a duplicate name, etc. -- controls whether to continue with loading in the hope that `require-trusted-types-for 'script'` isn't enforced yet, versus fail immediately. Default behavior is 'stop'.
+	 */
+	onPolicyCreationFailure?: "continue" | "stop";
+
 	/**
 	 * The name of the Trusted Types policy created by webpack to serve bundle chunks.
 	 */
